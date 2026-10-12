@@ -1,0 +1,15 @@
+===================================================================
+LANGKAH TERAKHIR: PASANG EKSTENSI BROWSER (CUKUP 1X SAJA)
+===================================================================
+Siti butuh ekstensi ini untuk mendeteksi scroll-mu!
+
+1. Buka tab baru di browser dan copas salah satu link berikut:
+   - Google Chrome : chrome://extensions/
+   - Microsoft Edge: edge://extensions/
+   - Brave Browser : brave://extensions/
+
+2. Nyalakan "Developer mode" (Mode Pengembang) di pojok kanan atas.
+3. Klik tombol "Load unpacked" (Muat yang belum dikemas).
+4. Cari folder tempat kamu menginstal Siti ini, lalu pilih folder bernama: siti-ekstensi
+
+Selesai! Klik tombol "Next" atau "Finish" di bawah untuk meluncurkan Siti.

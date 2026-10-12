@@ -12,9 +12,15 @@ def main():
     # Inisialisasi server penerima laporan (tracker)
     tracker = ScrollTracker()
     
-    # Hubungkan sinyal dari tracker ke aksi Siti
-    tracker.trigger_signal.connect(siti.attack_signal.emit)
-    tracker.alert_signal.connect(siti.alert_signal.emit)  # BARU: Menyambungkan sinyal mode meow
+    # Handler pemutus arus sinyal dari tracker
+    def handle_tracker_signal(action, total_tabs, active_tab_index):
+        if action == "ATTACK":
+            siti.attack_signal.emit(total_tabs, active_tab_index)
+        elif action == "ALERT":
+            siti.alert_signal.emit()
+
+    # Hubungkan sinyal utama dari tracker ke handler
+    tracker.trigger_signal.connect(handle_tracker_signal)
     
     # Jalankan server di background
     tracker.start()

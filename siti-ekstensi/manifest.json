@@ -2,13 +2,20 @@
   "manifest_version": 3,
   "name": "Mata-Mata Siti",
   "version": "1.0",
-  "description": "Melaporkan doomscrolling langsung ke desktop pet.",
+  "description": "Melaporkan doomscrolling langsung ke desktop pet Siti.",
   "background": {
     "service_worker": "background.js"
   },
   "content_scripts": [
     {
-      "matches": ["*://*.youtube.com/*", "*://*.tiktok.com/*"],
+      "matches": [
+        "*://*.youtube.com/*", 
+        "*://*.tiktok.com/*", 
+        "*://*.instagram.com/*",
+        "*://*.facebook.com/*",
+        "*://*.x.com/*",
+        "*://*.twitter.com/*"
+      ],
       "js": ["content.js"]
     }
   ]

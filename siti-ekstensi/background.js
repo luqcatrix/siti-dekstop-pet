@@ -25,7 +25,6 @@ function connectWebSocket() {
 
     ws.onerror = (error) => {
         console.log("[Siti Ekstensi] Error pada WebSocket. Menutup koneksi...");
-        // Tutup paksa untuk memicu onclose agar bisa reconnect
         if (ws) ws.close(); 
     };
 }
@@ -35,12 +34,35 @@ connectWebSocket();
 
 // Mendengarkan ketukan/laporan dari content.js
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    // Hanya kirim sinyal JIKA Siti sedang aktif dan terhubung
     if (ws && ws.readyState === WebSocket.OPEN) {
-        if (message.action === "ATTACK") {
-            ws.send("ATTACK");
-        } else if (message.action === "ALERT") {
-            ws.send("ALERT");
+        if (message.action === "ATTACK" || message.action === "ALERT") {
+            // Gunakan sender.tab agar indeks tab yang dikirim 100% akurat
+            if (sender && sender.tab) {
+                chrome.tabs.query({ windowId: sender.tab.windowId }, (tabs) => {
+                    const totalTabs = tabs ? tabs.length : 1;
+                    const activeTabIndex = sender.tab.index; // Indeks tab persis tempat user scroll
+
+                    const payload = JSON.stringify({
+                        action: message.action,
+                        totalTabs: totalTabs,
+                        activeTabIndex: activeTabIndex
+                    });
+
+                    ws.send(payload);
+                });
+            } else {
+                // Fallback jika pesan dikirim bukan dari konteks tab biasa
+                chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
+                    if (tabs && tabs.length > 0) {
+                        const payload = JSON.stringify({
+                            action: message.action,
+                            totalTabs: tabs.length,
+                            activeTabIndex: tabs[0].index
+                        });
+                        ws.send(payload);
+                    }
+                });
+            }
         }
     } else {
         console.log("[Siti Ekstensi] Pesan ditahan: Siti sedang tidak aktif.");
